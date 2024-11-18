@@ -30,6 +30,7 @@ Votre mission est de développer cette API.
 - **Base de données :** PostgreSQL.
 - **Docker :** Pour isoler le développement des différents services (frontend, backend, base de données).
 - **Gitflow :** Structure de gestion de version avec les branches `main`, `dev`, `feature/*`, et `hotfix/*`.
+[gitflow](./Supports/GITFLOW.md)
 - **Insomnia :** Pour tester les endpoints de votre API. 
 
 --- 
