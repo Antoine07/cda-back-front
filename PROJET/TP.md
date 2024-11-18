@@ -133,7 +133,7 @@ Les objectifs du projet sont les suivants :
 1. **Création de la base de données PostgreSQL**
    - Utilisez le MCD suivant :
    
-     ![MCD](./medias/formateur_mcd_lot.jpg)
+     <img src="./medias/formateur_mcd_lot.jpg" width="400" />
 
 2. **Configuration de Docker** pour inclure uniquement PostgreSQL.
 
@@ -266,14 +266,13 @@ src/
 
 5. Intégrez, avec Shadcn et en respectant `AD`, les maquettes HD suivantes :
    1. Page principale :
-      ![home](./medias/maquettes/01_home.png)
+      <img src="./medias/maquettes/01_home.png" widht="400" />
    2. Page de login :
-      ![login](./medias/maquettes/02_loginpage.png)
+      <img src="./medias/maquettes/02_loginpage.png" widht="400" />
    3. Page Dashboard :
-      ![dashboard](./medias/maquettes/03_dashboard.png)
+      <img src="./medias/maquettes/03_dashboard.png" widht="400" />
 
 ### Sécurité
 
 1. Mettez en place la sécurité avec JWT côté serveur.
    1. Configurez en créant les clés privée et publique avec `lexik/jwt-authentication-bundle`.
-   2. 
