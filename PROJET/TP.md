@@ -36,7 +36,7 @@ Votre mission est de développer cette API.
 
 ## **3. Planning**
 
- <img src="./medias/diagrammeGantt.png" width="300" />
+ <img src="./medias/diagrammeGantt.png" width="450" />
 
 ## **4. Objectifs**
 
@@ -88,7 +88,7 @@ Les objectifs du projet sont les suivants :
 
 2. **Mise en place de l'authentification JWT** pour sécuriser les endpoints.
 
-   <img src="./medias/diagramme_sequence.png" width="300" />
+   <img src="./medias/diagramme_sequence.png" width="450" />
 
 4. **Création des entités Doctrine** pour les écoles, formateurs, étudiants et équipes.
 
@@ -133,7 +133,7 @@ Les objectifs du projet sont les suivants :
 1. **Création de la base de données PostgreSQL**
    - Utilisez le MCD suivant :
    
-     <img src="./medias/formateur_mcd_lot.jpg" width="300" />
+     <img src="./medias/formateur_mcd_lot.jpg" width="450" />
 
 2. **Configuration de Docker** pour inclure uniquement PostgreSQL.
 
@@ -266,13 +266,13 @@ src/
 
 5. Intégrez, avec Shadcn et en respectant `AD`, les maquettes HD suivantes :
    1. Page principale :
-      <img src="./medias/maquettes/01_home.png" width="300" />
+      <img src="./medias/maquettes/01_home.png" width="450" />
    2. Page de login :
-      <img src="./medias/maquettes/02_loginpage.png" width="300" />
+      <img src="./medias/maquettes/02_loginpage.png" width="450" />
    3. Page Dashboard :
-      <img src="./medias/maquettes/03_dashboard.png" width="300" />
+      <img src="./medias/maquettes/03_dashboard.png" width="450" />
    4. Page List
-      <img src="./medias/maquettes/04_list.png" width="300" />
+      <img src="./medias/maquettes/04_list.png" width="450" />
 
 
 6. Affichez la liste des étudiants depuis la `card` Students stats bouton `view all student(s)`
