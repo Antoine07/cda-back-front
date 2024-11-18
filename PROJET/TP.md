@@ -245,7 +245,7 @@ Ce projet couvre les compétences suivantes :
    1. RTK Query.
    2. Shadcn.
    3. TanStack Router.
-3. Configurez le store avec RTK.
+3. Configurez le store avec RTK (voir la structure du projet ci-dessous).
 4. Mettez en place l'architecture `Atomic Design`. Aidez-vous du support de cours : [atomic](./Supports/01_atomic_design.md)
 
 Structure du projet :
@@ -271,6 +271,13 @@ src/
       <img src="./medias/maquettes/02_loginpage.png" widht="400" />
    3. Page Dashboard :
       <img src="./medias/maquettes/03_dashboard.png" widht="400" />
+   4. Page List
+      <img src="./medias/maquettes/04_list.png" widht="400" />
+
+
+6. Affichez la liste des étudiants depuis la `card` Students stats bouton `view all student(s)`
+   Utilisez l'endpoint `/api/students` : Récupérer les étudiants avec RTK Query.
+7. Faire la métrique avec `recharts` (qu'il faudra installer) pour afficher les étudiants `online`, `offline`, `in_person`, `busy` à l'aide d'un diagramme circulaire, intégrez le nombre d'étudiant(s) également sur cette page (voir le 5.3 ci-dessus).
 
 ### Sécurité
 
