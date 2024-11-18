@@ -221,7 +221,7 @@ Ce projet couvre les compétences suivantes :
 ### Backend API
 
 1. Installez Symfony avec API Platform.
-2. Créez un fichier `docker-compose` pour définir la base de données, soit MySQL, soit PostgreSQL.
+2. Créez un fichier `docker-compose` pour définir la base de données, soit MySQL, soit PostgreSQL. Vous pouvez utiliser le docker-composer suivant : [docker-compose](./docker-compose.yaml)
 3. Créez la base de données à partir de Symfony.  
    **Remarque** : Si vous installez PostgreSQL, vous devez utiliser un composant pour le DQL de Doctrine, par exemple `martin-georgiev/postgresql-for-doctrine`.
 4. Installez les dépendances suivantes dans Symfony :

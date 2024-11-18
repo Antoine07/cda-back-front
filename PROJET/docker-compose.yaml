@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: treelearning_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - network_treelearning
+    restart: always
+
+  adminer:
+    image: adminer
+    container_name: treelearning_adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - network_treelearning
+    restart: always
+
+volumes:
+  db_data:
+
+networks:
+  network_treelearning:
+    driver: bridge
