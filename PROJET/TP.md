@@ -36,7 +36,7 @@ Votre mission est de développer cette API.
 
 ## **3. Planning**
 
-![diagram Gantt](./medias/diagrammeGantt.png)
+ <img src="./medias/diagrammeGantt.png" widht="300" />
 
 ## **4. Objectifs**
 
@@ -88,13 +88,13 @@ Les objectifs du projet sont les suivants :
 
 2. **Mise en place de l'authentification JWT** pour sécuriser les endpoints.
 
-   ![diagramme de séquence](./medias/diagramme_sequence.png)
+   <img src="./medias/diagramme_sequence.png" widht="300" />
 
-3. **Création des entités Doctrine** pour les écoles, formateurs, étudiants et équipes.
+4. **Création des entités Doctrine** pour les écoles, formateurs, étudiants et équipes.
 
    [Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html)
 
-4. **Création des endpoints** pour récupérer les métriques sur les écoles, équipes, formateurs et étudiants.
+5. **Création des endpoints** pour récupérer les métriques sur les écoles, équipes, formateurs et étudiants.
 
 ⚠️ Pour l'ensemble des endpoints de l'application, la documentation de l'API doit être fournie comme suit :
 
@@ -133,7 +133,7 @@ Les objectifs du projet sont les suivants :
 1. **Création de la base de données PostgreSQL**
    - Utilisez le MCD suivant :
    
-     <img src="./medias/formateur_mcd_lot.jpg" width="400" />
+     <img src="./medias/formateur_mcd_lot.jpg" width="300" />
 
 2. **Configuration de Docker** pour inclure uniquement PostgreSQL.
 
@@ -266,13 +266,13 @@ src/
 
 5. Intégrez, avec Shadcn et en respectant `AD`, les maquettes HD suivantes :
    1. Page principale :
-      <img src="./medias/maquettes/01_home.png" widht="400" />
+      <img src="./medias/maquettes/01_home.png" widht="300" />
    2. Page de login :
-      <img src="./medias/maquettes/02_loginpage.png" widht="400" />
+      <img src="./medias/maquettes/02_loginpage.png" widht="300" />
    3. Page Dashboard :
-      <img src="./medias/maquettes/03_dashboard.png" widht="400" />
+      <img src="./medias/maquettes/03_dashboard.png" widht="300" />
    4. Page List
-      <img src="./medias/maquettes/04_list.png" widht="400" />
+      <img src="./medias/maquettes/04_list.png" widht="300" />
 
 
 6. Affichez la liste des étudiants depuis la `card` Students stats bouton `view all student(s)`
