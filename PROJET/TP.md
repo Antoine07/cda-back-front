@@ -221,27 +221,86 @@ Ce projet couvre les compétences suivantes :
 ### Backend API
 
 1. Installez Symfony avec API Platform.
-2. Créez un fichier `docker-compose` pour définir la base de données, soit MySQL, soit PostgreSQL. Vous pouvez utiliser le docker-composer suivant : [docker-compose](./docker-compose.yaml)
-3. Créez la base de données à partir de Symfony.  
+2. Créez un fichier `docker-compose` pour définir la base de données, soit MySQL, soit PostgreSQL. Vous pouvez utiliser le docker-composer suivant (postgres) : [docker-compose](./docker-compose.yaml)
+3. Créez la base de données dans Symfony.  
    **Remarque** : Si vous installez PostgreSQL, vous devez utiliser un composant pour le DQL de Doctrine, par exemple `martin-georgiev/postgresql-for-doctrine`.
 4. Installez les dépendances suivantes dans Symfony :
-   1. API Platform.
-   2. symfony/serializer : [serializer](https://symfony.com/doc/current/components/serializer.html)
-   3. Foundry : [Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html)
-5. À partir du MCD (voir ce document), créez les entités dans Symfony à l'aide de Doctrine :
+   1.  🟢 API Platform. 
+   2.  🟢 symfony/serializer : [serializer](https://symfony.com/doc/current/components/serializer.html)
+   3. 🟢 Foundry : [Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html)
+5. 🟠 À partir du MCD (voir ce document), créez les entités dans Symfony à l'aide de Doctrine
+   Pour cette partie aidez-vous des captures d'écran des tables dans le dossier suivant : [databases](./medias/databases/).
    1. Chaque entité devra avoir un statut, une date de création et de mise à jour. La table User possèdera un champ `presence` de type Enum, avec les options `online`, `offline`, `in_person`, `busy`.
-   2. Aidez-vous des captures d'écran des tables dans le dossier suivant : [databases](./medias/databases/)
+   2. Créez un trait `CreatedUpdatedTrait`, ajoutez les setter et getter suivants
+      1. Setter et Getter, que font ces fonctions ?
+      ```php
+         #[ORM\PrePersist]
+         public function setCreationDate(): void
+         {
+            $this->createdAt = new \DateTime();
+         }
+
+         #[ORM\PreUpdate]
+         public function updateTimestamp(): void
+         {
+            $this->updatedAt = new \DateTime();
+         }
+      ```
+   3. Créez un trait et un type Doctrine `Enum`, en PHP vous devez gérer le champ `status` des entitées avec un Enum que vous devez définir.
+      ```php
+         namespace App\Enum;
+
+         enum Status: string
+         {
+            case DRAFT = 'draft';         // Le cours est en brouillon
+            case PUBLISHED = 'published'; // Le cours est publié
+            case ARCHIVED = 'archived';   // Le cours est archivé
+            case IN_PROGRESS = 'in_progress'; // Le cours est en cours d'exécution
+            case COMPLETED = 'completed'; // Le cours est terminé
+         }
+      ```
+         1. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
+    
 6. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
    [tuto foundry](./Supports/03_foundry.md)
 7. Définissez les endpoints supplémentaires suivants pour le projet :
-   1. `/api/students` : Récupérer les étudiants.
+   Pour les endpoints suivants utiliser la notion de `#Groups` avec votre `serializer`
+   Dans Symfony qui utilise Doctrine, les entités sont souvent liées entre elles avec des **relations** comme OneToMany, ManyToOne, etc. Lors de la sérialisation, ces relations peuvent causer des références en boucle. Les groupes sélectionnent les données à afficher.
+      ```php
+         namespace Acme;
+
+         use Symfony\Component\Serializer\Annotation\Groups;
+
+         class MyObj
+         {
+            #[Groups(['group1', 'group2'])]
+            public string $foo;
+
+            #[Groups(['group4'])]
+            public string $anotherProperty;
+
+            #[Groups(['group3'])]
+            public function getBar() // is* methods are also supported
+            {
+               return $this->bar;
+            }
+
+            // ...
+         }
+      ```
+      Dans le contrôleur 
+      ```php
+         // Sérialiser l'objet User en JSON avec un groupe spécifique
+         return $this->json($user, 200, [], ['groups' => 'user_details']);
+      ```
+   1. `/api/students` : Récupérer tous les étudiants.
    2. `/api/teachers` : Récupérer les enseignants.
-   3. `/api/presence/teacher` : Récupérer la présence des enseignants.
+   3. `/api/presence/teacher` : Récupérer la présence des enseignants. Jointure avec les tables `user`, `module` et `rating`, penser au rôle `ROLE_STUDENT` qui définit le role de l'utilisateur de type étudiant.
    4. `/api/presence/student` : Récupérer la présence des étudiants.
 
 ### Frontend Client
 
-1. Installez React avec Vite.
+1. Installez React avec Vite, utilisez `TypeScript`.
 2. Installez les dépendances suivantes :
    1. RTK Query.
    2. Shadcn.
