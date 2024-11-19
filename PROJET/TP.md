@@ -220,34 +220,79 @@ Ce projet couvre les compétences suivantes :
 
 ### Backend API
 
-1. Installez Symfony avec API Platform.
-2. Créez un fichier `docker-compose` pour définir la base de données, soit MySQL, soit PostgreSQL. Vous pouvez utiliser le docker-composer suivant (postgres) : [docker-compose](./docker-compose.yaml)
-3. Créez la base de données dans Symfony.  
-   **Remarque** : Si vous installez PostgreSQL, vous devez utiliser un composant pour le DQL de Doctrine, par exemple `martin-georgiev/postgresql-for-doctrine`.
-4. Installez les dépendances suivantes dans Symfony :
-   1.  🟢 API Platform. 
-   2.  🟢 symfony/serializer : [serializer](https://symfony.com/doc/current/components/serializer.html)
-   3. 🟢 Foundry : [Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html)
-5. 🟠 À partir du MCD (voir ce document), créez les entités dans Symfony à l'aide de Doctrine
-   Pour cette partie aidez-vous des captures d'écran des tables dans le dossier suivant : [databases](./medias/databases/).
-   1. Chaque entité devra avoir un statut, une date de création et de mise à jour. La table User possèdera un champ `presence` de type Enum, avec les options `online`, `offline`, `in_person`, `busy`.
-      1. Créez un trait `CreatedUpdatedTrait`, ajoutez les setter et getter suivants
-         **Setter et Getter, que font ces fonctions ?**
-         ```php
-            #[ORM\PrePersist]
-            public function setCreationDate(): void
-            {
-               $this->createdAt = new \DateTime();
-            }
+### Installation et Configuration
 
-            #[ORM\PreUpdate]
-            public function updateTimestamp(): void
-            {
-               $this->updatedAt = new \DateTime();
-            }
+1. **Installez Symfony avec API Platform.**  
+   Utilisez la commande suivante pour installer Symfony et API Platform :
+   
+   ```bash
+   symfony new app
+   cd app
+   composer require api
+   ```
+
+2. **Créez un fichier `docker-compose` pour définir la base de données.**  
+   Choisissez MySQL ou PostgreSQL. Voici un exemple pour PostgreSQL :  
+   [docker-compose](./docker-compose.yaml).
+
+3. **Créez la base de données dans Symfony.**  
+   Pour ce faire, utilisez la commande suivante après avoir configuré votre `DATABASE_URL` dans le fichier `.env` :
+
+   ```txt
+   DATABASE_URL="postgresql://admin:password@127.0.0.1:5432/tree-learning-api?serverVersion=16&charset=utf8"
+   ```
+   Exécutez la commande suivante
+   ```bash
+      php bin/console doctrine:database:create
+   ```
+
+   **Remarque** : Si vous utilisez PostgreSQL, ajoutez le composant `martin-georgiev/postgresql-for-doctrine` pour la gestion des types spécifiques de PostgreSQL.
+
+### Installation des dépendances
+
+4. **Installez les dépendances suivantes dans Symfony :**
+   1. **API Platform** - pour créer des APIs rapidement et efficacement.
+   2. **Symfony Serializer** : [Documentation sur le serializer](https://symfony.com/doc/current/components/serializer.html).
+   3. **Zenstruck Foundry** - pour faciliter la création de données factices : [Documentation sur Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html).
+
+### Création des Entités
+
+5. **Créez les entités dans Symfony en utilisant Doctrine, à partir du MCD fourni.**  
+   Utilisez les captures d'écran des tables disponibles dans le dossier suivant : [databases](./medias/databases/).
+
+   1. **Gérez les champs spécifiques pour chaque entité :**
+      - Chaque entité doit avoir un **statut**, une **date de création** et une **date de mise à jour**.
+      - Pour la table `User`, ajoutez un champ `presence` de type Enum avec les options suivantes : `online`, `offline`, `in_person`, `busy`.
+      
+      1. **Créez un trait `CreatedUpdatedTrait`** pour gérer la date de création et de mise à jour :
+      
+         ```php
+         #[ORM\PrePersist]
+         public function setCreationDate(): void
+         {
+            $this->createdAt = new \DateTime();
+         }
+
+         #[ORM\PreUpdate]
+         public function updateTimestamp(): void
+         {
+            $this->updatedAt = new \DateTime();
+         }
          ```
-      2. Créez un trait, `StatusTrait`, pour le champ `status` avec un type Doctrine `Enum`, en PHP vous devez gérer le champ `status` des entitées avec un Enum que vous devez définir comme suit dans le codebase :
-      ```php
+
+         **Décorez l'entité** avec `#[HasLifecycleCallbacks]` pour activer les événements du cycle de vie :
+
+         ```php
+         #[ORM\Entity(repositoryClass: UserRepository::class)]
+         #[ORM\HasLifecycleCallbacks]
+         #[ORM\Table(name: '`user`')]
+         #[ApiResource]
+         class User{}
+         ```
+
+      2. **Créez un trait `StatusTrait`** pour le champ `status` en utilisant un Enum :
+
+         ```php
          namespace App\Enum;
 
          enum Status: string
@@ -255,103 +300,120 @@ Ce projet couvre les compétences suivantes :
             case DRAFT = 'draft';         // Le cours est en brouillon
             case PUBLISHED = 'published'; // Le cours est publié
             case ARCHIVED = 'archived';   // Le cours est archivé
-            case IN_PROGRESS = 'in_progress'; // Le cours est en cours d'exécution
-            case COMPLETED = 'completed'; // Le cours est terminé
+            case IN_PROGRESS = 'in_progress'; // En cours d'exécution
+            case COMPLETED = 'completed'; // Terminé
          }
+         ```
 
-      // Status::DRAFT ; // acceder à la valeur dans le code courant
-      ```
-    Pour définir un type ENUM dans l'ORM `enumType`, on décore la propriété de la manière suivante : 
+         **Définissez le type Enum** dans Doctrine :
+
+         ```php
+         #[ORM\Column(nullable: true, enumType: Status::class)]
+         private ?Status $status = null;
+         ```
+
+      3. **Gérez le champ `presence`** en définissant le type `enumType` comme précédemment pour le champ `status`.
+
+   2. **Définissez les rôles pour la table `user`** :  
+      Ajoutez les rôles suivants : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN`, et `ROLE_USER`. Ils seront utilisés plus tard pour calculer le score (rating) des étudiants et des enseignants.
+
+### Hydratation des Données et Création des Endpoints
+
+6. **Hydratez les tables à l'aide de Foundry.**  
+   Suivez le tutoriel suivant pour générer des données factices :  
+   [Tutoriel sur Foundry](./Supports/03_foundry.md).
+
+7. **Créez les endpoints supplémentaires pour le projet.**  
+   Utilisez la fonctionnalité des `#Groups` du `serializer` pour gérer la sérialisation des entités et éviter les références circulaires.
+
+   Exemple d'utilisation des `Groups` :
 
    ```php
-    #[ORM\Column(nullable: true, enumType: Status::class)]
-    private ?Status $status = null;
+   namespace Acme;
+
+   use Symfony\Component\Serializer\Annotation\Groups;
+
+   class MyObj
+   {
+      #[Groups(['group1', 'group2'])]
+      public string $foo;
+
+      #[Groups(['group4'])]
+      public string $anotherProperty;
+
+      #[Groups(['group3'])]
+      public function getBar()
+      {
+         return $this->bar;
+      }
+   }
    ```
 
-      3. Définissez le champ presence en gérant en définissant le type `enumType`.
-      
-   2. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
-    
-6. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
-   [tuto foundry](./Supports/03_foundry.md)
-7. Définissez les endpoints supplémentaires suivants pour le projet :
-   Pour les endpoints suivants utiliser la notion de `#Groups` avec votre `serializer`
-   Dans Symfony qui utilise Doctrine, les entités sont souvent liées entre elles avec des **relations** comme OneToMany, ManyToOne, etc. Lors de la sérialisation, ces relations peuvent causer des références en boucle. Les groupes sélectionnent les données à afficher.
-      ```php
-         namespace Acme;
+   **Exemple d'utilisation dans le contrôleur** :
 
-         use Symfony\Component\Serializer\Annotation\Groups;
+   ```php
+   // Sérialiser l'objet User en JSON avec un groupe spécifique
+   return $this->json($user, 200, [], ['groups' => 'user_details']);
+   ```
 
-         class MyObj
-         {
-            #[Groups(['group1', 'group2'])]
-            public string $foo;
+   **Liste des endpoints :**
 
-            #[Groups(['group4'])]
-            public string $anotherProperty;
+   1. **`/api/students`** : Récupérer tous les étudiants.
+   2. **`/api/teachers`** : Récupérer les enseignants.
+   3. **`/api/presence/teacher`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `module` et `rating`. Notez que le rôle `ROLE_STUDENT` détermine l'utilisateur de type étudiant.
+   4. **`/api/presence/student`** : Récupérer la présence des étudiants.
 
-            #[Groups(['group3'])]
-            public function getBar() // is* methods are also supported
-            {
-               return $this->bar;
-            }
-
-            // ...
-         }
-      ```
-      
-      Dans le contrôleur.
-   
-      ```php
-         // Sérialiser l'objet User en JSON avec un groupe spécifique
-         return $this->json($user, 200, [], ['groups' => 'user_details']);
-      ```
-      
-   1. `/api/students` : Récupérer tous les étudiants.
-   2. `/api/teachers` : Récupérer les enseignants.
-   3. `/api/presence/teacher` : Récupérer la présence des enseignants. Jointure avec les tables `user`, `module` et `rating`, penser au rôle `ROLE_STUDENT` qui définit le role de l'utilisateur de type étudiant.
-   4. `/api/presence/student` : Récupérer la présence des étudiants.
 
 ### Frontend Client
 
-1. Installez React avec Vite, utilisez `TypeScript`.
-2. Installez les dépendances suivantes :
-   1. RTK Query.
-   2. Shadcn.
-   3. TanStack Router.
-3. Configurez le store avec RTK (voir la structure du projet ci-dessous).
-4. Mettez en place l'architecture `Atomic Design`. Aidez-vous du support de cours : [atomic](./Supports/01_atomic_design.md)
+1. **Installez et configurez l'environnement de base :**
+   1. Installez **React** avec **Vite** en utilisant TypeScript.
+   2. Installez les dépendances suivantes :
+      - **RTK Query** pour la gestion des requêtes et de l'état global.
+      - **Shadcn** pour les composants UI.
+      - **TanStack Router** pour la navigation côté client.
 
-Structure du projet :
-```txt
-src/
-├── api/
-│   ├── endpoints/
-│   └── apiSlice.ts
-├── components/
-│   ├── atoms/
-│   ├── molecules/
-│   ├── organisms/
-│   ├── templates/
-│   └── ui/
-└── app/
-    └── store.js
-```
+2. **Configurez le store Redux avec RTK :**
+   1. Créez la configuration de base du store Redux avec RTK.
+   2. Mettez en place le slice `apiSlice.ts` pour gérer les appels API via RTK Query. Utilisez la structure suivante pour organiser le code :
+   
+   ```txt
+   src/
+   ├── api/
+   │   ├── endpoints/
+   │   └── apiSlice.ts
+   ├── components/
+   │   ├── atoms/
+   │   ├── molecules/
+   │   ├── organisms/
+   │   ├── templates/
+   │   └── ui/
+   └── app/
+       └── store.js
+   ```
 
-5. Intégrez, avec Shadcn et en respectant `AD`, les maquettes HD suivantes :
-   1. Page principale :
+3. **Mettez en place l'architecture Atomic Design :**
+   1. Organisez les composants selon la méthodologie **Atomic Design**.
+   2. Référez-vous au support de cours pour une bonne mise en œuvre : [Atomic Design](./Supports/01_atomic_design.md).
+
+4. **Intégrez les maquettes en utilisant Shadcn et en respectant Atomic Design :**
+   1. Intégrez la **page principale** :
       <img src="./medias/maquettes/01_home.png" width="450" />
-   2. Page de login :
+   2. Créez la **page de login** :
       <img src="./medias/maquettes/02_loginpage.png" width="450" />
-   3. Page Dashboard :
+   3. Mettez en place la **page Dashboard** :
       <img src="./medias/maquettes/03_dashboard.png" width="450" />
-   4. Page List
+   4. Intégrez la **page List** :
       <img src="./medias/maquettes/04_list.png" width="450" />
 
+5. **Affichez les données des étudiants :**
+   1. Utilisez le composant `card` "Students stats" avec un bouton `view all student(s)` pour afficher la liste des étudiants.
+   2. Connectez-vous à l'API via l'endpoint `/api/students` avec **RTK Query** pour récupérer la liste des étudiants.
 
-6. Affichez la liste des étudiants depuis la `card` Students stats bouton `view all student(s)`
-   Utilisez l'endpoint `/api/students` : Récupérer les étudiants avec RTK Query.
-7. Faire la métrique avec `recharts` (qu'il faudra installer) pour afficher les étudiants `online`, `offline`, `in_person`, `busy` à l'aide d'un diagramme circulaire, intégrez le nombre d'étudiant(s) également sur cette page (voir le 5.3 ci-dessus).
+6. **Ajoutez des statistiques des étudiants avec `recharts` :**
+   1. Installez la bibliothèque **recharts**.
+   2. Créez un diagramme circulaire pour afficher la répartition des étudiants selon leur statut (`online`, `offline`, `in_person`, `busy`).
+   3. Intégrez également le nombre total d'étudiants sur la **page Dashboard**.
 
 ### Sécurité
 
