@@ -231,22 +231,22 @@ Ce projet couvre les compétences suivantes :
 5. 🟠 À partir du MCD (voir ce document), créez les entités dans Symfony à l'aide de Doctrine
    Pour cette partie aidez-vous des captures d'écran des tables dans le dossier suivant : [databases](./medias/databases/).
    1. Chaque entité devra avoir un statut, une date de création et de mise à jour. La table User possèdera un champ `presence` de type Enum, avec les options `online`, `offline`, `in_person`, `busy`.
-   2. Créez un trait `CreatedUpdatedTrait`, ajoutez les setter et getter suivants
-      1. Setter et Getter, que font ces fonctions ?
-      ```php
-         #[ORM\PrePersist]
-         public function setCreationDate(): void
-         {
-            $this->createdAt = new \DateTime();
-         }
+      1. Créez un trait `CreatedUpdatedTrait`, ajoutez les setter et getter suivants
+         **Setter et Getter, que font ces fonctions ?**
+         ```php
+            #[ORM\PrePersist]
+            public function setCreationDate(): void
+            {
+               $this->createdAt = new \DateTime();
+            }
 
-         #[ORM\PreUpdate]
-         public function updateTimestamp(): void
-         {
-            $this->updatedAt = new \DateTime();
-         }
-      ```
-   3. Créez un trait et un type Doctrine `Enum`, en PHP vous devez gérer le champ `status` des entitées avec un Enum que vous devez définir.
+            #[ORM\PreUpdate]
+            public function updateTimestamp(): void
+            {
+               $this->updatedAt = new \DateTime();
+            }
+         ```
+      2. Créez un trait, `StatusTrait`, pour le champ `status` avec un type Doctrine `Enum`, en PHP vous devez gérer le champ `status` des entitées avec un Enum que vous devez définir comme suit dans le codebase :
       ```php
          namespace App\Enum;
 
@@ -261,17 +261,20 @@ Ce projet couvre les compétences suivantes :
 
       // Status::DRAFT ; // acceder à la valeur dans le code courant
       ```
-    Pour définir un type ENUM en base données dans l'ORM ce type c'est `enumType`, on décore la propriété de la manière suivante
+    Pour définir un type ENUM dans l'ORM `enumType`, on décore la propriété de la manière suivante : 
+
    ```php
     #[ORM\Column(nullable: true, enumType: Status::class)]
     private ?Status $status = null;
    ```
+
+      3. Définissez le champ presence en gérant en définissant le type `enumType`.
       
-         1. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
+   2. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
     
-7. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
+6. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
    [tuto foundry](./Supports/03_foundry.md)
-8. Définissez les endpoints supplémentaires suivants pour le projet :
+7. Définissez les endpoints supplémentaires suivants pour le projet :
    Pour les endpoints suivants utiliser la notion de `#Groups` avec votre `serializer`
    Dans Symfony qui utilise Doctrine, les entités sont souvent liées entre elles avec des **relations** comme OneToMany, ManyToOne, etc. Lors de la sérialisation, ces relations peuvent causer des références en boucle. Les groupes sélectionnent les données à afficher.
       ```php
