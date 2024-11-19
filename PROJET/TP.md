@@ -251,13 +251,13 @@ Ce projet couvre les compétences suivantes :
 ### Installation des dépendances
 
 4. **Installez les dépendances suivantes dans Symfony :**
-   1. **API Platform** - pour créer des APIs rapidement et efficacement.
-   2. **Symfony Serializer** : [Documentation sur le serializer](https://symfony.com/doc/current/components/serializer.html).
-   3. **Zenstruck Foundry** - pour faciliter la création de données factices : [Documentation sur Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html).
+   1. 🟢 **API Platform** - pour créer des APIs rapidement et efficacement.
+   2. 🟢 **Symfony Serializer** : [Documentation sur le serializer](https://symfony.com/doc/current/components/serializer.html).
+   3. 🟢 **Zenstruck Foundry** - pour faciliter la création de données factices : [Documentation sur Foundry](https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html).
 
 ### Création des Entités
 
-5. **Créez les entités dans Symfony en utilisant Doctrine, à partir du MCD fourni.**  
+5. 🟠 **Créez les entités dans Symfony en utilisant Doctrine, à partir du MCD fourni.**  
    Utilisez les captures d'écran des tables disponibles dans le dossier suivant : [databases](./medias/databases/).
 
    1. **Gérez les champs spécifiques pour chaque entité :**
@@ -316,6 +316,8 @@ Ce projet couvre les compétences suivantes :
 
    2. **Définissez les rôles pour la table `user`** :  
       Ajoutez les rôles suivants : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN`, et `ROLE_USER`. Ils seront utilisés plus tard pour calculer le score (rating) des étudiants et des enseignants.
+
+   3. Terminez la création des autres entités.
 
 ### Hydratation des Données et Création des Endpoints
 
