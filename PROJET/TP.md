@@ -258,6 +258,8 @@ Ce projet couvre les compétences suivantes :
             case IN_PROGRESS = 'in_progress'; // Le cours est en cours d'exécution
             case COMPLETED = 'completed'; // Le cours est terminé
          }
+
+      // Status::DRAFT ; // acceder à la valeur dans le code courant
       ```
          1. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
     
