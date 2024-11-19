@@ -296,11 +296,14 @@ Ce projet couvre les compétences suivantes :
             // ...
          }
       ```
-      Dans le contrôleur 
+      
+      Dans le contrôleur.
+   
       ```php
          // Sérialiser l'objet User en JSON avec un groupe spécifique
          return $this->json($user, 200, [], ['groups' => 'user_details']);
       ```
+      
    1. `/api/students` : Récupérer tous les étudiants.
    2. `/api/teachers` : Récupérer les enseignants.
    3. `/api/presence/teacher` : Récupérer la présence des enseignants. Jointure avec les tables `user`, `module` et `rating`, penser au rôle `ROLE_STUDENT` qui définit le role de l'utilisateur de type étudiant.
