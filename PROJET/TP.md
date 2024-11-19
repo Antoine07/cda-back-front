@@ -261,11 +261,17 @@ Ce projet couvre les compétences suivantes :
 
       // Status::DRAFT ; // acceder à la valeur dans le code courant
       ```
+    Pour définir un type ENUM en base données dans l'ORM ce type c'est `enumType`, on décore la propriété de la manière suivante
+   ```php
+    #[ORM\Column(nullable: true, enumType: Status::class)]
+    private ?Status $status = null;
+   ```
+      
          1. Définissez les rôles suivants pour la table `user` : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN` et `ROLE_USER`. Ils serviront par la suite dans le calcul de rating (score) des étudiants et professeurs.
     
-6. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
+7. Hydratez les tables à l'aide de Foundry, en vous aidant de la documentation suivante :  
    [tuto foundry](./Supports/03_foundry.md)
-7. Définissez les endpoints supplémentaires suivants pour le projet :
+8. Définissez les endpoints supplémentaires suivants pour le projet :
    Pour les endpoints suivants utiliser la notion de `#Groups` avec votre `serializer`
    Dans Symfony qui utilise Doctrine, les entités sont souvent liées entre elles avec des **relations** comme OneToMany, ManyToOne, etc. Lors de la sérialisation, ces relations peuvent causer des références en boucle. Les groupes sélectionnent les données à afficher.
       ```php
