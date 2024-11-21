@@ -377,12 +377,24 @@ Ce projet couvre les compétences suivantes :
 
    **Liste des endpoints :**
 
-   1. **`/api/students`** : Récupérer tous les étudiants.
-   2. **`/api/teachers`** : Récupérer les enseignants.
-   3. **`/api/presence/teacher`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `module` et `rating`. Notez que le rôle `ROLE_STUDENT` détermine l'utilisateur de type étudiant.
-   4. **`/api/score/{role}`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le score par rôle des étudiants.
-   5. **`/api/presence/student`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le statut de présence des étudiants.
-   6. Pagination dans le fichier de configuration de Symfony changez le nombre d'item par page 
+   1. **`/api/score/{role}`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le score par rôle des étudiants.
+   Rmq : créez un contrôleur **UserRatingsByRoleController**, les valeurs de role (parmétre variable) : `student`, `teacher`, faites un service pour mettre l'algorithmie, créez un dossier Service et un service `UserRatingService`, injectez le repository `UserRepository` comme suit : 
+   ```php
+   <?php
+      namespace App\Service;
+
+      use App\Repository\UserRepository;
+      use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
+      class UserRatingService
+      {
+         public function __construct(private UserRepository $userRepository) {}
+      }
+   ```
+   2. **`/api/presence/{role}`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `useModulePlanning` . 
+   3. **`/api/students`** : Récupérer tous les étudiants, peut-on utiliser directement l'API, dans ce cas proposer un **endpoint** pour récupérer les ressources.
+   4. **`/api/teachers`** : Récupérer les enseignants.
+   5. Pagination dans le fichier de configuration de Symfony changez le nombre d'item par page 
 
       ```yaml
       api_platform:
