@@ -317,13 +317,30 @@ Ce projet couvre les compétences suivantes :
    2. **Définissez les rôles pour la table `user`** :  
       Ajoutez les rôles suivants : `ROLE_STUDENT`, `ROLE_TEACHER`, `ROLE_ADMIN`, et `ROLE_USER`. Ils seront utilisés plus tard pour calculer le score (rating) des étudiants et des enseignants.
 
-   3. Terminez la création des autres entités.
+   3. Terminez la création des autres entitées.
 
 ### Hydratation des Données et Création des Endpoints
 
 6. **Hydratez les tables à l'aide de Foundry.**  
+   Installez les fixtures dans Symfony et Foundry
+   1.  `composer require --dev orm-fixtures`
+   2.  `composer require --dev zenstruck/foundry`
    Suivez le tutoriel suivant pour générer des données factices :  
    [Tutoriel sur Foundry](./Supports/03_foundry.md).
+
+   Faites les Factories dans le fichier AppFixtures.php
+
+   Commandes utiles
+   ```bash
+      # Création des fakers Foundry 
+      php bin/console make:foundry
+      # les fixtures
+      php bin/console doctrine:fixtures:load
+      # version alias
+      # php bin/console d:f:l
+   ```
+
+   3. Hydratez les entitées User, UserDetails, Degree.
 
 7. **Créez les endpoints supplémentaires pour le projet.**  
    Utilisez la fonctionnalité des `#Groups` du `serializer` pour gérer la sérialisation des entités et éviter les références circulaires.
@@ -331,11 +348,11 @@ Ce projet couvre les compétences suivantes :
    Exemple d'utilisation des `Groups` :
 
    ```php
-   namespace Acme;
+   namespace App\Model;
 
    use Symfony\Component\Serializer\Annotation\Groups;
 
-   class MyObj
+   class Acme
    {
       #[Groups(['group1', 'group2'])]
       public string $foo;
@@ -363,8 +380,22 @@ Ce projet couvre les compétences suivantes :
    1. **`/api/students`** : Récupérer tous les étudiants.
    2. **`/api/teachers`** : Récupérer les enseignants.
    3. **`/api/presence/teacher`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `module` et `rating`. Notez que le rôle `ROLE_STUDENT` détermine l'utilisateur de type étudiant.
-   4. **`/api/presence/student`** : Récupérer la présence des étudiants.
+   4. **`/api/score/{role}`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le score par rôle des étudiants.
+   5. **`/api/presence/student`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le statut de présence des étudiants.
+   6. Pagination dans le fichier de configuration de Symfony changez le nombre d'item par page 
 
+      ```yaml
+      api_platform:
+         title: Hello API Platform
+         version: 1.0.0
+         defaults:
+            stateless: true
+            cache_headers:
+                  vary: ['Content-Type', 'Authorization', 'Origin']
+
+            pagination_items_per_page: 10 # Changez ici le nombre d'item
+
+      ```
 
 ### Frontend Client
 
