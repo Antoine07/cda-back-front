@@ -257,7 +257,7 @@ Ce projet couvre les compétences suivantes :
 
 ### Création des Entités
 
-5. 🟠 **Créez les entités dans Symfony en utilisant Doctrine, à partir du MCD fourni.**  
+5. 🟢 **Créez les entités dans Symfony en utilisant Doctrine, à partir du MCD fourni.**  
    Utilisez les captures d'écran des tables disponibles dans le dossier suivant : [databases](./medias/databases/).
 
    1. **Gérez les champs spécifiques pour chaque entité :**
@@ -321,7 +321,7 @@ Ce projet couvre les compétences suivantes :
 
 ### Hydratation des Données et Création des Endpoints
 
-6. **Hydratez les tables à l'aide de Foundry.**  
+6.🟢 **Hydratez les tables à l'aide de Foundry.**  
    Installez les fixtures dans Symfony et Foundry
    1.  `composer require --dev orm-fixtures`
    2.  `composer require --dev zenstruck/foundry`
@@ -342,7 +342,7 @@ Ce projet couvre les compétences suivantes :
 
    3. Hydratez les entitées User, UserDetails, Degree.
 
-7. **Créez les endpoints supplémentaires pour le projet.**  
+7. 🟢 **Créez les endpoints supplémentaires pour le projet.**  
    Utilisez la fonctionnalité des `#Groups` du `serializer` pour gérer la sérialisation des entités et éviter les références circulaires.
 
    Exemple d'utilisation des `Groups` :
@@ -377,7 +377,7 @@ Ce projet couvre les compétences suivantes :
 
    **Liste des endpoints :**
 
-   1. **`/api/score/{role}`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le score par rôle des étudiants.
+   1. **`/api/score_user/{role}`** : Créez ce nouveau point d'entrée dans l'API pour récupérer le score par rôle des étudiants.
    Rmq : créez un contrôleur **UserRatingsByRoleController**, les valeurs de role (parmétre variable) : `student`, `teacher`, faites un service pour mettre l'algorithmie, créez un dossier Service et un service `UserRatingService`, injectez le repository `UserRepository` comme suit : 
    ```php
    <?php
@@ -391,12 +391,13 @@ Ce projet couvre les compétences suivantes :
          public function __construct(private UserRepository $userRepository) {}
       }
    ```
-   2. **`/api/presence/{role}`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `useModulePlanning` . 
+   2. **`/api/presence_user/{role}`** : Récupérer la présence des enseignants. Utilisez une jointure avec les tables `user`, `useModulePlanning` . 
    3. **`/api/students`** : Récupérer tous les étudiants, peut-on utiliser directement l'API, dans ce cas proposer un **endpoint** pour récupérer les ressources.
    4. **`/api/teachers`** : Récupérer les enseignants.
    5. Pagination dans le fichier de configuration de Symfony changez le nombre d'item par page 
 
       ```yaml
+      # config/packages/api_platform.yaml
       api_platform:
          title: Hello API Platform
          version: 1.0.0
@@ -437,16 +438,31 @@ Ce projet couvre les compétences suivantes :
        └── store.js
    ```
 
+```bash
+mkdir -p src/{api/endpoints,components/{atoms,molecules,organisms,templates,ui},app} && touch src/api/apiSlice.ts src/app/store.js
+# pour les types que l'on va définir
+mkdir types
+# helpers
+mkdir utils
+# routing
+mkdir routes
+# hook perso
+mkdir hooks
+```
+
 3. **Mettez en place l'architecture Atomic Design :**
    1. Organisez les composants selon la méthodologie **Atomic Design**.
    2. Référez-vous au support de cours pour une bonne mise en œuvre : [Atomic Design](./Supports/01_atomic_design.md).
 
 4. **Intégrez les maquettes en utilisant Shadcn et en respectant Atomic Design :**
-   1. Intégrez la **page principale** :
+   1.  Intégrez la **page principale** en mettant les boutons suivants (voir le point 4 pour afficher ces données).
+       1.  Affichez tous les students
+       2.  Affichez tous les teachers
+       3.  Affichez le score des students
       <img src="./medias/maquettes/01_home.png" width="450" />
-   2. Créez la **page de login** :
+   2. (optionnelle) Créez la **page de login** :
       <img src="./medias/maquettes/02_loginpage.png" width="450" />
-   3. Mettez en place la **page Dashboard** :
+   3. (optionnelle) Mettez en place la **page Dashboard** :
       <img src="./medias/maquettes/03_dashboard.png" width="450" />
    4. Intégrez la **page List** :
       <img src="./medias/maquettes/04_list.png" width="450" />
