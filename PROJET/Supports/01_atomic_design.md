@@ -89,15 +89,15 @@ Les templates sont des structures plus larges qui combinent des organismes. Ils 
 
 ```tsx
 // src/components/templates/MainTemplate.tsx
-import { FormGroup } from '../organisms/FormGroup';
+
 import { Navbar } from '../organisms/Navbar';
 
-export const MainTemplate = () => {
+export const MainTemplate = ( {children} ) => {
   return (
     <div>
       <Navbar />
       <main>
-        <FormGroup />
+        {children}
       </main>
     </div>
   );
@@ -116,9 +116,10 @@ Les pages sont des instances spécifiques d'un template. Elles contiennent du co
 ```tsx
 // src/pages/HomePage.tsx
 import { MainTemplate } from '../components/templates/MainTemplate';
+import { FormGroup } from '../organisms/FormGroup';
 
 export const HomePage = () => {
-  return <MainTemplate />;
+  return <MainTemplate><FormGroup/></MainTemplate;
 };
 ```
 
